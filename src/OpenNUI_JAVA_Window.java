@@ -10,6 +10,7 @@ public class OpenNUI_JAVA_Window extends JFrame
 	GridBagConstraints constraints;
 	static final String IMG_PATH = OpenNUI_JAVA_Window.class.getResource("").getPath()+"image/";
 	String logo_img = IMG_PATH+"logo.png";
+	ImageIcon logo_image = new ImageIcon(IMG_PATH+"logo.png");
 	ImageIcon connected = new ImageIcon(IMG_PATH+"connected.png");
 	ImageIcon disconnected = new ImageIcon(IMG_PATH+"disconnected.png");
 	JLabel status = new JLabel(new String("Status : Not Connected"), disconnected, JLabel.CENTER);
@@ -21,8 +22,7 @@ public class OpenNUI_JAVA_Window extends JFrame
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 		}
 		catch(Exception e){}
-		System.out.println(OpenNUI_JAVA_Window.class.getResource("").getPath());
-		System.out.println(IMG_PATH);
+		
 		SwingUtilities.updateComponentTreeUI(OpenNUI_JAVA_Window.this);
 		
 		Toolkit tk = Toolkit.getDefaultToolkit();
@@ -35,11 +35,8 @@ public class OpenNUI_JAVA_Window extends JFrame
 		constraints.fill = GridBagConstraints.BOTH;
 
 		// Logo Image
-		// 왜 10,10으로 나오는거냐?
-		MediaTracker mt = new MediaTracker(this);
-		mt.addImage(tk.getImage(logo_img), 0);
-		JImagePanel imagePanel = new JImagePanel(tk.getImage(logo_img));	
-		addComponent(imagePanel, 0, 0, 1, 1);
+		JLabel Logo = new JLabel(new String(""), logo_image, JLabel.CENTER);
+		addComponent(Logo, 0, 0, 1, 1);
 		
 		//Rendering panel
 		//JPanel renderingPanel = new JPanel();
@@ -69,27 +66,6 @@ public class OpenNUI_JAVA_Window extends JFrame
 		container.add(c, constraints);
 	}
 
-	class JImagePanel extends JPanel
-	{
-		private Image image;
-		public JImagePanel(Image img)
-		{
-			this.image = img;
-			repaint();
-		}
-		
-		public void paintComponent(Graphics g)
-		{
-			super.paintComponent(g);
-			g.clearRect(0, 0, this.getWidth(), this.getHeight());
-			if(image != null)
-			{
-				g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), this);
-				System.out.println(this.getWidth()+ ", "+this.getHeight());	
-			}			
-		}
-	}
-	
 	//임시 메인파일.
 	public static void main(String[] args)
 	{
