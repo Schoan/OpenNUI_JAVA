@@ -1,12 +1,11 @@
 import java.awt.*;
-
 import javax.swing.*;
 
 
 public class OpenNUI_JAVA_Window extends JFrame
 {
 	Container container;
-	GridBagLayout layout;
+	GridBagLayout gridBagLayout;
 	GridBagConstraints constraints;
 	static final String IMG_PATH = OpenNUI_JAVA_Window.class.getResource("").getPath()+"image/";
 	String logo_img = IMG_PATH+"logo.png";
@@ -17,6 +16,7 @@ public class OpenNUI_JAVA_Window extends JFrame
 	
 	public OpenNUI_JAVA_Window()
 	{
+		
 		try
 		{
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
@@ -29,23 +29,27 @@ public class OpenNUI_JAVA_Window extends JFrame
 		Dimension screenSize = tk.getScreenSize();
 		System.out.println("해상도 : " + screenSize.width + "x" + screenSize.height);
 		container = getContentPane();
-		container.setLayout(new GridBagLayout());
+		gridBagLayout = new GridBagLayout();
+		gridBagLayout.columnWidths = new int[]{200, 640, 150};
+		gridBagLayout.rowHeights = new int[]{100, 480, 30};
+		container.setLayout(gridBagLayout);
+		
 		constraints = new GridBagConstraints();
-		constraints.insets = new Insets(5,5,5,5);
-		constraints.fill = GridBagConstraints.BOTH;
-
+		constraints.anchor = GridBagConstraints.SOUTH;
+		constraints.insets = new Insets(1, 1, 5, 5);
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		gridBagLayout.setConstraints(container, constraints);
+				
 		// Logo Image
 		JLabel Logo = new JLabel(new String(""), logo_image, JLabel.CENTER);
-		addComponent(Logo, 0, 0, 1, 1);
+		addComponent(Logo, constraints, 0, 0, 1, 1, 0, 0);
 		
 		//Rendering panel
-		//JPanel renderingPanel = new JPanel();
-		JButton renderingPanel = new JButton("rendering Panel will be here");
-		
-		addComponent(renderingPanel, 1, 0, 3, 3);
+		RenderingPanel rp = new RenderingPanel(IMG_PATH+"image.jpg");
+		addComponent(rp, constraints, 1, 0, 3, 1, 1, 1);
 		
 		// Status 
-		addComponent(status, 4, 2, 1, 1);
+		addComponent(status, constraints, 2, 2, 1, 1, 0, 0);
 		
 		this.setLocation(screenSize.width/4, screenSize.height/4);
 		this.setSize(screenSize.width/2, screenSize.height/2);
@@ -55,15 +59,17 @@ public class OpenNUI_JAVA_Window extends JFrame
 		//pack();
 	}
 	
-	private void addComponent(Component c, int row, int column, int width, int height)
+	private void addComponent(Component c, GridBagConstraints gc, int row, int column, int width, int height, int weightx, int weighty)
 	{
-		constraints.gridx = column;
-		constraints.gridy = row;
-		
+		constraints.gridx = 0;
+		constraints.gridy = 0;
 		constraints.gridwidth = width;
 		constraints.gridheight = height;
+		constraints.weightx = weightx;
+		constraints.weighty = weighty;
+		gridBagLayout.setConstraints(c, gc);
 		
-		container.add(c, constraints);
+		container.add(c);
 	}
 
 	//임시 메인파일.
