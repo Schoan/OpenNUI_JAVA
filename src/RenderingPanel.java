@@ -1,3 +1,4 @@
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Transparency;
 import java.awt.color.ColorSpace;
@@ -29,12 +30,13 @@ class RenderingPanel extends JPanel
 		Init();
 	}
 	
-	public static void SetSize(int w, int h)
+	public static void setImageSize(Dimension d)
 	{
-		width = w;
-		height = h;
+		width = d.width;
+		height = d.height-74;
+		System.out.println("Changed : "+width+"*"+height);
 	}
-	
+
 	private void Init()
 	{
 		System.out.println(Path);
@@ -57,38 +59,28 @@ class RenderingPanel extends JPanel
 
 		 return ( data.getData() );
 	}
-			
+		
 	private OutputStream Rendering(byte[] bytess) throws IOException
 	{
 		//image_bytes[] = 
 		OutputStream stream = null;
 		//bufferedimage image
 		image = createRGBImage(bytess, width, height);
+		width = image.getWidth();
+		height = image.getHeight();
 		System.out.println(image.getWidth()+" * "+image.getHeight());
-		//BufferedImage image = createRGBImage(img_bytes, width, height);
-		
-		/*
-		try 
-		{
-		    ImageIO.write(image, "PNG", stream);
-			//ImageIO.write(image, "PNG", imgFile);
-		}		
-		finally 
-		{
-		    //stream.close();
-		}*/
 		Graphics g = image.getGraphics();
 		paint(g);
-		
 		return stream;
 	}
 	
+	@Override
 	public void paint(Graphics g)
 	{
 		if(this.image != null)
 		{
-			g.drawImage(image, 0, 0, this);
-			g.drawRect(0, 0, image.getWidth(), image.getHeight());
+			g.drawImage(image, 0, 0, width, height, this);
+			//g.drawRect(0, 0, width, height);
 		}
 	}
 	
